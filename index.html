@@ -77,7 +77,41 @@
           <br><br>
           <h1 class="title">Hey Pookie,</h1>
         </div>
+<section class="section-dark" id="together-timer">
+  <div class="container has-text-centered" data-aos="fade-up">
+    <h1 class="title section-title">We've been together for...</h1>
+    <div id="together-counter">
+      <ul id="hitungmundur"> <li><span id="t-days">00</span><p class="days_text">Days</p></li>
+        <li class="separator">:</li>
+        <li><span id="t-hours">00</span><p class="hours_text">Hours</p></li>
+        <li class="separator">:</li>
+        <li><span id="t-minutes">00</span><p class="minutes_text">Minutes</p></li>
+        <li class="separator">:</li>
+        <li><span id="t-seconds">00</span><p class="seconds_text">Seconds</p></li>
+      </ul>
+    </div>
+  </div>
+</section>
 
+<script>
+  function updateTogetherTimer() {
+    const startDate = new Date("2023-01-01T00:00:00"); // CHANGE THIS to your anniversary date (YYYY-MM-DD)
+    const now = new Date();
+    const diff = now - startDate;
+
+    const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+    const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+    const minutes = Math.floor((diff / (1000 * 60)) % 60);
+    const seconds = Math.floor((diff / 1000) % 60);
+
+    document.getElementById("t-days").innerText = days;
+    document.getElementById("t-hours").innerText = hours;
+    document.getElementById("t-minutes").innerText = minutes;
+    document.getElementById("t-seconds").innerText = seconds;
+  }
+  setInterval(updateTogetherTimer, 1000);
+  updateTogetherTimer();
+</script>
         <p class="bodytext" data-aos="fade-up" data-aos-easing="linear">
           Ever since we started talking, my days have been brighter. 
           <br />
@@ -105,6 +139,7 @@
                   </div>
                 </article>
               </div>
+              
               <div class="tile is-parent">
                 <article class="tile is-child notification foto2" data-aos="fade-up">
                   <div class="content">
