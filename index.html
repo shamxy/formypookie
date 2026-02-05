@@ -375,25 +375,27 @@
     <script src="js/menikah.js"></script>
     <script src="https://cdn.rawgit.com/michalsnik/aos/2.1.1/dist/aos.js"></script>
     
-    <script>
-        // 1. ANIMATION & AUDIO FORCE START
+<script>
+        // 1. ANIMATION & AUDIO UNLOCK
         AOS.init({ easing: "ease-out", duration: 800 });
 
         const music = document.getElementById("bgMusic");
         
-        // Immediate attempt to play (Works on Brave if Autoplay is allowed)
-        music.play().catch(e => {
-            console.log("Autoplay blocked. Music waiting for first interaction.");
-        });
-
-        // Backup: Hits the millisecond they touch the screen
-        function rawStart() {
-            music.play();
-            document.removeEventListener('mousedown', rawStart);
-            document.removeEventListener('touchstart', rawStart);
+        // This function handles the browser's requirement for a user gesture
+        function startAudio() {
+            music.play().then(() => {
+                console.log("Music started!");
+                // Remove listeners once it successfully plays
+                window.removeEventListener('click', startAudio);
+                window.removeEventListener('touchstart', startAudio);
+            }).catch(e => {
+                console.log("Playback still blocked", e);
+            });
         }
-        document.addEventListener('mousedown', rawStart);
-        document.addEventListener('touchstart', rawStart);
+
+        // Listen for any click or touch on the window to trigger the music
+        window.addEventListener('click', startAudio);
+        window.addEventListener('touchstart', startAudio);
 
         // 2. PRELOADER HIDE
         $(window).on('load', function() {
