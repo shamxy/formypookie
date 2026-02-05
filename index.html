@@ -358,18 +358,18 @@
             <div class="column is-6">
                 <div class="notification is-white" style="box-shadow: 0 5px 15px rgba(0,0,0,0.05);">
                    <ul style="list-style: none; padding: 0;">
-    <li onmouseenter="hoverPlay('https://files.catbox.moe/6crwb7.mp3')" onmouseleave="hoverStop()">
-        <i class="fas fa-music" style="color: #BC8887; margin-right: 10px;"></i>
-        <strong>WE FELL IN OCTOBER</strong> - Girl In Red
-    </li>
-    <li onmouseenter="hoverPlay('https://files.catbox.moe/y65gcn.mp3')" onmouseleave="hoverStop()">
-        <i class="fas fa-music" style="color: #BC8887; margin-right: 10px;"></i>
-        <strong>RAINDANCE</strong> - Dave ft Tems
-    </li>
-                        <li onmouseenter="hoverPlay('https://files.catbox.moe/y65gcn.mp3')" onmouseleave="hoverStop()">
-        <i class="fas fa-music" style="color: #BC8887; margin-right: 10px;"></i>
-        <strong>Song Title 2</strong> - Artist Name
-    </li>
+   <li onclick="playSong('https://files.catbox.moe/y65gcn.mp3')" 
+    style="padding: 10px 0; border-bottom: 1px solid #eee; cursor: pointer;">
+    <i class="fas fa-play-circle" style="color: #BC8887; margin-right: 10px;"></i>
+    <strong>WE FELL IN LOVE IN OCTOBER</strong> - Girl In Red 
+</li>
+   <li onclick="playSong('https://files.catbox.moe/6crwb7.mp3')" 
+    style="padding: 10px 0; border-bottom: 1px solid #eee; cursor: pointer;">
+    <i class="fas fa-play-circle" style="color: #BC8887; margin-right: 10px;"></i>
+    <strong><RAINDANCE/strong> - Dave ft Tems
+</li>
+
+</li>
 </ul>
                 </div>
             </div>
@@ -467,26 +467,24 @@ $('.card-image img').on('click', function() {
     $('#modal-img').attr('src', $(this).attr('src'));
     $('#image-modal').css('display', 'flex');
 });
-    let currentHoverAudio = null;
+    let currentAudio = null;
 
-function hoverPlay(audioUrl) {
-    // Stop any song currently playing from a previous hover
-    if (currentHoverAudio) {
-        currentHoverAudio.pause();
-        currentHoverAudio.currentTime = 0;
+function playSong(audioUrl) {
+    // If the same song is already playing, stop it (Toggle off)
+    if (currentAudio && currentAudio.src === new URL(audioUrl, window.location.href).href) {
+        currentAudio.pause();
+        currentAudio = null;
+        return;
     }
-    
-    currentHoverAudio = new Audio(audioUrl);
-    currentHoverAudio.play().catch(error => {
-        console.log("Autoplay blocked. She needs to click the page once first!");
-    });
-}
 
-function hoverStop() {
-    if (currentHoverAudio) {
-        currentHoverAudio.pause();
-        currentHoverAudio.currentTime = 0;
+    // Stop any other song currently playing
+    if (currentAudio) {
+        currentAudio.pause();
     }
+
+    // Play the new song
+    currentAudio = new Audio(audioUrl);
+    currentAudio.play();
 }
     </script>
     
