@@ -366,7 +366,7 @@
    <li onclick="playSong('https://files.catbox.moe/6crwb7.mp3')" 
     style="padding: 10px 0; border-bottom: 1px solid #eee; cursor: pointer;">
     <i class="fas fa-play-circle" style="color: #BC8887; margin-right: 10px;"></i>
-    <strong><RAINDANCE/strong> - Dave ft Tems
+    <strong><RAINDANCE</strong> - Dave ft Tems
 </li>
 
 </li>
@@ -406,34 +406,52 @@
     <script src="js/menikah.js"></script>
     <script src="https://cdn.rawgit.com/michalsnik/aos/2.1.1/dist/aos.js"></script>
     
-<script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="js/menikah.js"></script>
+    <link href="https://cdn.rawgit.com/michalsnik/aos/2.1.1/dist/aos.css" rel="stylesheet">
+    <script src="https://cdn.rawgit.com/michalsnik/aos/2.1.1/dist/aos.js"></script>
+    
+    <script>
         // 1. ANIMATION & AUDIO UNLOCK
         AOS.init({ easing: "ease-out", duration: 800 });
 
-        const music = document.getElementById("bgMusic");
+        const mainBgMusic = document.getElementById("bgMusic");
+        let currentPlaylistAudio = null;
         
-        // This function handles the browser's requirement for a user gesture
         function startAudio() {
-            music.play().then(() => {
-                console.log("Music started!");
-                // Remove listeners once it successfully plays
+            mainBgMusic.play().then(() => {
                 window.removeEventListener('click', startAudio);
                 window.removeEventListener('touchstart', startAudio);
-            }).catch(e => {
-                console.log("Playback still blocked", e);
-            });
+            }).catch(e => console.log("Waiting for interaction..."));
         }
 
-        // Listen for any click or touch on the window to trigger the music
         window.addEventListener('click', startAudio);
         window.addEventListener('touchstart', startAudio);
 
-        // 2. PRELOADER HIDE
+        // 2. PLAY SONG FUNCTION (Pauses Raindance)
+        function playSong(audioUrl) {
+            // Pause the main background music
+            if (mainBgMusic) {
+                mainBgMusic.pause();
+            }
+
+            // Stop any playlist song already playing
+            if (currentPlaylistAudio) {
+                currentPlaylistAudio.pause();
+                currentPlaylistAudio.currentTime = 0;
+            }
+
+            // Play the new song
+            currentPlaylistAudio = new Audio(audioUrl);
+            currentPlaylistAudio.play();
+        }
+
+        // 3. PRELOADER HIDE
         $(window).on('load', function() {
             $('.preloader-wrapper').fadeOut('fast');
         });
 
-        // 3. STOPWATCH TIMER
+        // 4. STOPWATCH TIMER
         function updateTogetherTimer() {
             const startDate = new Date(2025, 10, 11, 0, 0, 0); 
             const now = new Date();
@@ -451,7 +469,7 @@
         setInterval(updateTogetherTimer, 1000);
         updateTogetherTimer();
 
-        // 4. DUAL CLOCKS (New York & Accra)
+        // 5. DUAL CLOCKS
         function updateClocks() {
             const now = new Date();
             const options1 = { timeZone: 'America/New_York', hour: '2-digit', minute: '2-digit', second: '2-digit' };
@@ -462,32 +480,19 @@
         }
         setInterval(updateClocks, 1000);
         updateClocks();
-// Function to open image in original ratio
-$('.card-image img').on('click', function() {
-    $('#modal-img').attr('src', $(this).attr('src'));
-    $('#image-modal').css('display', 'flex');
-});
-    let currentAudio = null;
 
-function playSong(audioUrl) {
-    // 1. Find the background music (Raindance) and pause it
-    // Assuming your background audio tag is <audio id="bg-music">
-    let bgMusic = document.getElementById('bg-music'); 
-    if (bgMusic) {
-        bgMusic.pause();
-    }
-
-    // 2. Stop any previous song that was playing from the list
-    if (currentAudio) {
-        currentAudio.pause();
-    }
-
-    // 3. Play the new song
-    currentAudio = new Audio(audioUrl);
-    currentAudio.play();
-}
+        // 6. IMAGE MODAL
+        $('.card-image img').on('click', function() {
+            $('#modal-img').attr('src', $(this).attr('src'));
+            $('#image-modal').css('display', 'flex');
+        });
     </script>
     
+    <div id="image-modal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.9); z-index:1000; justify-content:center; align-items:center; cursor:pointer;" onclick="this.style.display='none'">
+        <img id="modal-img" src="" style="max-width:90%; max-height:90%; border: 3px solid white; border-radius: 5px;">
+    </div>
+</body>
+</html>
     <div id="image-modal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.9); z-index:1000; justify-content:center; align-items:center; cursor:pointer;" onclick="this.style.display='none'">
     <img id="modal-img" src="" style="max-width:90%; max-height:90%; border: 3px solid white; border-radius: 5px;">
 </div>
