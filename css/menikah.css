@@ -653,4 +653,11 @@ body.preloader-site {
   padding: 10px;
 }
 
+.card-image figure.image img {
+    height: 350px; /* You can adjust this height to your liking */
+    width: 100%;
+    object-fit: cover; /* This is the "magic" that crops without stretching */
+    object-position: center; /* Keeps the focus in the middle of the photo */
+    border-radius: 8px; /* Optional: rounds the corners slightly */
+}
 
