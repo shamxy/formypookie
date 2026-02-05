@@ -431,29 +431,7 @@
         }
         setInterval(updateClocks, 1000);
         updateClocks();
-    function autoScroll(speed) {
-    // speed is in milliseconds, lower is faster
-    let scrollInterval = setInterval(() => {
-        window.scrollBy(0, 1); // Scroll by 1 pixel
-        
-        // Stop scrolling when the bottom of the page is reached
-        if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
-            clearInterval(scrollInterval);
-        }
-    }, speed);
 
-    // Stop autoscroll if she touches the screen or clicks (manual override)
-    const stopScroll = () => clearInterval(scrollInterval);
-    window.addEventListener('mousedown', stopScroll);
-    window.addEventListener('touchstart', stopScroll);
-}
-
-// Start autoscrolling after the preloader fades out
-$(window).on('load', function() {
-    setTimeout(() => {
-        autoScroll(30); // Adjust 30 to make it faster (20) or slower (40)
-    }, 3000); // 3-second delay so she can read the first part
-});
     </script>
 </body>
 </body>
