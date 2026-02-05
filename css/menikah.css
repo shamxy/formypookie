@@ -676,7 +676,25 @@ body.preloader-site {
   text-align: center;
   padding: 10px;
 }
+#our-music li {
+    transition: all 0.3s ease;
+    border-radius: 8px;
+    padding: 15px !important; /* Adds a bit more space for the effect */
+    margin-bottom: 5px;
+}
 
+#our-music li:hover {
+    background-color: rgba(188, 136, 135, 0.1); /* Subtle pink glow */
+    transform: scale(1.02); /* Slight "pop out" effect */
+    padding-left: 25px !important; /* Slides the text slightly right */
+    color: #BC8887;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+}
+
+#our-music li:hover i {
+    color: #BC8887;
+    transform: rotate(15deg); /* Tilts the play icon slightly */
+}
 
 
 
