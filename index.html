@@ -371,16 +371,32 @@
     <script src="https://cdn.rawgit.com/michalsnik/aos/2.1.1/dist/aos.js"></script>
     
     <script>
-        AOS.init({ easing: "ease-out", duration: 800 });
+        <script>
+    // 1. Force AOS (Animations)
+    AOS.init({ easing: "ease-out", duration: 800 });
 
-        // Play music on click
-        function playMusic() {
-            const music = document.getElementById("bgMusic");
-            music.play().catch(e => console.log("User interaction needed"));
-            document.removeEventListener('click', playMusic);
-        }
-        document.addEventListener('click', playMusic);
+    // 2. THE FORCE START (FOR BRAVE/UNLOCKED BROWSERS)
+    const music = document.getElementById("bgMusic");
+    
+    // Attempt to play immediately on load
+    music.play().catch(e => {
+        console.log("Autoplay blocked by browser. Music will start on first click/touch.");
+    });
 
+    // 3. BACKUP (In case the above is blocked, it hits on the first millisecond of interaction)
+    function rawStart() {
+        music.play();
+        document.removeEventListener('mousedown', rawStart);
+        document.removeEventListener('touchstart', rawStart);
+    }
+    document.addEventListener('mousedown', rawStart);
+    document.addEventListener('touchstart', rawStart);
+
+    // 4. PRELOADER HIDE
+    $(window).on('load', function() {
+        $('.preloader-wrapper').fadeOut('fast');
+    });
+</script>
         // Stopwatch Timer
         function updateTogetherTimer() {
             const startDate = new Date(2025, 10, 11, 0, 0, 0); 
