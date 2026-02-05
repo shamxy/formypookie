@@ -470,19 +470,19 @@ $('.card-image img').on('click', function() {
     let currentAudio = null;
 
 function playSong(audioUrl) {
-    // If the same song is already playing, stop it (Toggle off)
-    if (currentAudio && currentAudio.src === new URL(audioUrl, window.location.href).href) {
-        currentAudio.pause();
-        currentAudio = null;
-        return;
+    // 1. Find the background music (Raindance) and pause it
+    // Assuming your background audio tag is <audio id="bg-music">
+    let bgMusic = document.getElementById('bg-music'); 
+    if (bgMusic) {
+        bgMusic.pause();
     }
 
-    // Stop any other song currently playing
+    // 2. Stop any previous song that was playing from the list
     if (currentAudio) {
         currentAudio.pause();
     }
 
-    // Play the new song
+    // 3. Play the new song
     currentAudio = new Audio(audioUrl);
     currentAudio.play();
 }
