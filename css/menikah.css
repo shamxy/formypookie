@@ -696,6 +696,28 @@ body.preloader-site {
     transform: rotate(15deg); /* Tilts the play icon slightly */
 }
 
+    /* Subtle glow and lift effect when you hover */
+    .essential-card {
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        border-radius: 15px !important;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+    }
+
+    .essential-card:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 12px 25px rgba(0, 0, 0, 0.1);
+    }
+
+    .clock-style {
+        letter-spacing: 2px;
+        background: rgba(255, 255, 255, 0.15);
+        padding: 5px 12px;
+        border-radius: 50px;
+        display: inline-block;
+        margin: 10px 0;
+        font-weight: 600;
+    }
 
 
 
