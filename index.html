@@ -25,9 +25,9 @@
 
 <body>
     <audio id="bgMusic" src="https://files.catbox.moe/y65gcn.mp3" loop></audio>
-<div id="loader-wrapper">
+<div id="loader-wrapper" onclick="openGift()">
     <div class="heart-loader">❤</div>
-    <div class="loader-text">Opening your gift...</div>
+    <div class="loader-text">Tap the heart to unwrap...</div>
 </div>
     <div class="preloader-wrapper">
         <div class="preloader">
@@ -660,6 +660,14 @@ function toggleNote() {
             const note = document.getElementById('love-note');
             note.style.display = (note.style.display === 'block') ? 'none' : 'block';
       } 
+        function openGift() {
+    const loader = document.getElementById("loader-wrapper");
+    if (loader) {
+        loader.classList.add("loader-hidden");
+        // Optional: Start the music the moment she "unwraps" it
+        if (typeof unlockAudio === "function") unlockAudio();
+    }
+}
     </script>
 
     <div id="image-modal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.9); z-index:10001; justify-content:center; align-items:center; cursor:pointer;" onclick="this.style.display='none'">
