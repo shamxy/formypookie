@@ -718,6 +718,39 @@ body.preloader-site {
         margin: 10px 0;
         font-weight: 600;
     }
+    
+    .modal-content-custom {
+        background-color: #ffffff;
+        padding: 40px;
+        border-radius: 20px;
+        max-width: 600px;
+        text-align: center;
+        border: 5px solid #BC8887;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    }
+    .modal-title {
+        color: #996E6D;
+        font-weight: 900;
+        font-size: 2rem;
+        margin-bottom: 20px;
+    }
+    .modal-text {
+        color: #555;
+        font-size: 1.2rem;
+        line-height: 1.6;
+    }
+    /* Simple scale-up animation */
+    .modal.is-active .modal-content-custom {
+        animation: zoomIn 0.3s ease;
+    }
+    @keyframes zoomIn {
+        from { transform: scale(0.8); opacity: 0; }
+        to { transform: scale(1); opacity: 1; }
+    }
+
+
+
+
 
 
 
