@@ -887,7 +887,14 @@ body.preloader-site {
     pointer-events: none;
     transition: opacity 0.8s ease, visibility 0.8s ease;
 }
+#loader-wrapper {
+    cursor: pointer;
+}
 
+.heart-loader:hover {
+    filter: drop-shadow(0 0 10px #BC8887);
+    transform: scale(1.1);
+}
 
 
 
