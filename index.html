@@ -52,6 +52,7 @@
                 </div>
             </nav>
 
+                                <li><a href="#our-music">Music</a></li>
             <div class="hero-body">
                 <div class="container has-text-centered">
                     <h1 class="subtitle" data-aos="fade-up">A Journey Just For You</h1>
@@ -71,7 +72,6 @@
                                 <li><a href="#small-things">Details</a></li>
                                 <li><a href="#bucket-list">Bucket List</a></li>
                                 <li><a href="#rsvp">Answer</a></li>
-                                <li><a href="#our-music">Music</a></li>
                             </ul>
                         </div>
                     </div>
@@ -523,6 +523,16 @@
     </p> 
 
 </div>
+<div class="floating-note-btn" onclick="toggleNote()">
+    ❤
+</div>
+
+<div id="love-note" class="note-popup">
+    <p class="note-text">
+        "Just a small reminder as you look through this: I'm so lucky to have you by my side. I love you."
+    </p>
+</div>
+    
    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="js/menikah.js"></script>
     <link href="https://cdn.rawgit.com/michalsnik/aos/2.1.1/dist/aos.css" rel="stylesheet">
@@ -608,6 +618,14 @@ function closeModal() {
     document.getElementById('lesson-modal').classList.remove('is-active');
 }
 
+function toggleNote() {
+    const note = document.getElementById('love-note');
+    if (note.style.display === 'block') {
+        note.style.display = 'none';
+    } else {
+        note.style.display = 'block';
+    }
+}
     </script>
 
     <div id="image-modal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.9); z-index:10001; justify-content:center; align-items:center; cursor:pointer;" onclick="this.style.display='none'">
