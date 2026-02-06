@@ -880,6 +880,13 @@ body.preloader-site {
     opacity: 0;
     visibility: hidden;
 }
+/* This is the part that makes the gift actually "open" */
+.loader-hidden {
+    opacity: 0 !important;
+    visibility: hidden !important;
+    pointer-events: none;
+    transition: opacity 0.8s ease, visibility 0.8s ease;
+}
 
 
 
