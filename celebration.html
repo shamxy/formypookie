@@ -18,7 +18,7 @@
             font-family: 'Georgia', serif;
         }
 
-        /* FLOATING PETALS */
+        /* FLOATING PETALS (The Visual DNA) */
         .petal {
             position: fixed;
             top: -10%;
@@ -45,8 +45,9 @@
             box-shadow: 0 10px 30px rgba(153, 110, 109, 0.1);
             z-index: 10;
             border: 1px solid rgba(255, 255, 255, 0.6);
-            width: 80%;
+            width: 85%;
             max-width: 400px;
+            box-sizing: border-box;
         }
 
         /* THE JAR */
@@ -58,68 +59,71 @@
             border-top: none;
             border-radius: 10px 10px 40px 40px;
             background: #BC8887;
-            margin-bottom: 20px;
+            margin-bottom: 25px;
             display: flex;
             justify-content: center;
             align-items: center;
             font-size: 1.5rem;
+            box-shadow: inset 0 -10px 20px rgba(0,0,0,0.1);
         }
 
         h1 {
             color: #996E6D;
             font-size: 1.8rem;
-            margin-bottom: 25px;
+            margin-bottom: 30px;
             line-height: 1.3;
         }
 
         .save-date-btn {
-            padding: 12px 28px;
+            padding: 15px 30px;
             border: none;
-            border-radius: 25px;
+            border-radius: 30px;
             background: #996E6D;
             color: white;
-            font-size: 1rem;
+            font-size: 1.1rem;
             font-family: 'Georgia', serif;
             cursor: pointer;
             box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-            margin-bottom: 20px;
-            transition: transform 0.2s;
+            margin-bottom: 25px;
+            transition: transform 0.2s, background 0.3s;
         }
 
         .save-date-btn:active { transform: scale(0.95); }
+        .save-date-btn:hover { background: #8e6261; }
 
         .home-link {
             color: #996E6D;
             text-decoration: none;
-            font-size: 0.8rem;
-            opacity: 0.7;
+            font-size: 0.85rem;
+            opacity: 0.6;
+            transition: opacity 0.3s;
         }
+        .home-link:hover { opacity: 1; }
 
         /* THE ENVELOPE */
         #envelope-trigger { 
             z-index: 20; 
-            text-align: center; 
             cursor: pointer; 
-            transition: transform 0.3s ease;
+            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
-        #envelope-trigger:hover { transform: scale(1.05); }
+        #envelope-trigger:hover { transform: scale(1.1); }
 
         .envelope {
-            width: 120px;
-            height: 80px;
+            width: 140px;
+            height: 90px;
             background: #BC8887;
             position: relative;
             border-radius: 0 0 10px 10px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
         }
         .envelope::before {
             content: '';
             position: absolute;
-            top: -60px;
+            top: -70px;
             left: 0;
-            border-left: 60px solid transparent;
-            border-right: 60px solid transparent;
-            border-bottom: 60px solid #BC8887;
+            border-left: 70px solid transparent;
+            border-right: 70px solid transparent;
+            border-bottom: 70px solid #BC8887;
         }
         
         .heart-particle { position: absolute; pointer-events: none; z-index: 15; }
@@ -140,17 +144,16 @@
     </div>
 
     <script>
-        // BACKGROUND PETALS
         function createPetals() {
             const symbols = ['🌸', '✨', '💖'];
-            for (let i = 0; i < 25; i++) {
+            for (let i = 0; i < 20; i++) {
                 const petal = document.createElement('div');
                 petal.className = 'petal';
                 petal.innerHTML = symbols[Math.floor(Math.random() * symbols.length)];
                 petal.style.left = Math.random() * 100 + 'vw';
-                petal.style.animationDuration = (Math.random() * 3 + 4) + 's';
-                petal.style.opacity = Math.random() * 0.5 + 0.3;
-                petal.style.fontSize = (Math.random() * 10 + 10) + 'px';
+                petal.style.animationDuration = (Math.random() * 3 + 5) + 's';
+                petal.style.opacity = Math.random() * 0.4 + 0.2;
+                petal.style.fontSize = (Math.random() * 12 + 10) + 'px';
                 document.body.appendChild(petal);
             }
         }
@@ -163,12 +166,12 @@
         trigger.onclick = () => {
             trigger.style.display = 'none';
             content.style.display = 'flex';
-            createHeartBurst(80);
+            createHeartBurst(85);
             
-            // Allow more hearts on click
+            // Interaction: Occasional heart bursts on click
             document.body.onclick = (e) => {
                 if (e.target.tagName !== 'A' && e.target.tagName !== 'BUTTON') {
-                    createHeartBurst(15);
+                    createHeartBurst(12);
                 }
             };
         };
@@ -177,18 +180,18 @@
             for (let i = 0; i < count; i++) {
                 const heart = document.createElement('div');
                 heart.className = 'heart-particle';
-                heart.innerHTML = ['💖', '❤️', '✨'][Math.floor(Math.random() * 3)];
+                heart.innerHTML = ['💖', '❤️'][Math.floor(Math.random() * 2)];
                 heart.style.left = '50vw';
                 heart.style.top = '45vh';
                 document.body.appendChild(heart);
                 
                 const angle = Math.random() * Math.PI * 2;
-                const dist = Math.random() * 400 + 50;
+                const dist = Math.random() * 450 + 50;
                 
                 heart.animate([
                     { transform: 'translate(-50%, -50%) scale(1)', opacity: 1 },
                     { transform: `translate(${Math.cos(angle)*dist}px, ${Math.sin(angle)*dist}px) scale(0)`, opacity: 0 }
-                ], { duration: 2000, easing: 'ease-out', fill: 'forwards' });
+                ], { duration: 2200, easing: 'ease-out', fill: 'forwards' });
                 
                 setTimeout(() => heart.remove(), 2500);
             }
