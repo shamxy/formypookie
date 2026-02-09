@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>You Said Yes! ❤️</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background: #F4E2E2; /* Same dusty pink theme */
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden; /* Prevents scrollbars during the explosion */
+            font-family: 'Georgia', serif;
+        }
+
+        .celebration-container {
+            text-align: center;
+            z-index: 10;
+        }
+
+        h1 {
+            color: #996E6D;
+            font-size: 3rem;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp 1s ease forwards 0.5s;
+        }
+
+        .heart-particle {
+            position: absolute;
+            pointer-events: none;
+            user-select: none;
+            z-index: 5;
+        }
+
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="celebration-container">
+        <h1>You've made me the happiest person! ❤️</h1>
+        <p style="color: #BC8887; font-size: 1.2rem;">Our journey truly begins today.</p>
+    </div>
+
+    <script>
+        function createHeartBurst() {
+            const count = 75; // Number of hearts in the burst
+            const container = document.body;
+            const centerX = window.innerWidth / 2;
+            const centerY = window.innerHeight / 2;
+
+            for (let i = 0; i < count; i++) {
+                const heart = document.createElement('div');
+                heart.className = 'heart-particle';
+                heart.innerHTML = '💖';
+                
+                // Randomize size
+                const size = Math.random() * 20 + 15;
+                heart.style.fontSize = size + 'px';
+                
+                // Set initial position to the center
+                heart.style.left = centerX + 'px';
+                heart.style.top = centerY + 'px';
+                
+                container.appendChild(heart);
+
+                // Calculate random trajectory
+                const angle = Math.random() * Math.PI * 2;
+                const velocity = Math.random() * 15 + 5;
+                const destinationX = Math.cos(angle) * (window.innerWidth * 0.8) + centerX;
+                const destinationY = Math.sin(angle) * (window.innerHeight * 0.8) + centerY;
+
+                // Animate using the Web Animations API
+                heart.animate([
+                    { transform: 'translate(-50%, -50%) scale(1)', opacity: 1 },
+                    { transform: `translate(${destinationX - centerX}px, ${destinationY - centerY}px) scale(0)`, opacity: 0 }
+                ], {
+                    duration: Math.random() * 2000 + 1000,
+                    easing: 'cubic-bezier(0.1, 0.8, 0.3, 1)',
+                    fill: 'forwards'
+                });
+
+                // Clean up DOM
+                setTimeout(() => heart.remove(), 3000);
+            }
+        }
+
+        // Trigger the burst immediately when the page loads
+        window.onload = createHeartBurst;
+
+        // Also trigger it if she clicks anywhere on this page
+        window.onclick = createHeartBurst;
+    </script>
+</body>
+</html>
