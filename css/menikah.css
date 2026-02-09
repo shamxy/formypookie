@@ -897,7 +897,27 @@ body.preloader-site {
     filter: drop-shadow(0 0 10px #BC8887);
     transform: scale(1.1);
 }
+.petal {
+    position: fixed;
+    top: -10%;
+    color: #ffc0cb; /* Soft pink */
+    user-select: none;
+    z-index: 1000;
+    pointer-events: none;
+    animation-name: fall, sway;
+    animation-timing-function: linear, ease-in-out;
+    animation-iteration-count: infinite, infinite;
+}
 
+@keyframes fall {
+    0% { top: -10%; }
+    100% { top: 110%; }
+}
+
+@keyframes sway {
+    0%, 100% { transform: translateX(0) rotate(0deg); }
+    50% { transform: translateX(50px) rotate(20deg); }
+}
 
 
 
