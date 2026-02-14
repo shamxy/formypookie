@@ -635,10 +635,35 @@
         document.getElementById('lesson-modal').classList.remove('is-active');
     }
 
-    function toggleNote() {
-        const note = document.getElementById('love-note');
-        note.style.display = (note.style.display === 'block') ? 'none' : 'block';
-    } 
+    const messages = [
+    "Just a reminder: You're doing amazing today, Pookie. 💖",
+    "I'm so lucky to have you in my world. ✨",
+    "Thinking of you and smiling like an idiot right now. 😊",
+    "You're my favorite human. Just thought you should know.",
+    "Distance is temporary, but 'us' is forever. ✈️❤",
+    "You make everything better just by being you.",
+    "I hope your day is as beautiful as your smile.",
+    "Counting down the seconds until I can see you again!"
+];
+
+function toggleNote() {
+    const note = document.getElementById('love-note');
+    const textElement = document.getElementById('note-text');
+    
+    // If note is hidden, pick a new message before showing it
+    if (note.style.display === 'none' || note.style.display === '') {
+        const randomMessage = messages[Math.floor(Math.random() * messages.length)];
+        textElement.innerText = randomMessage;
+        
+        note.style.display = 'block';
+        
+        // Optional: Auto-hide after 6 seconds so it doesn't clutter her screen
+        setTimeout(() => { note.style.display = 'none'; }, 6000);
+    } else {
+        note.style.display = 'none';
+    }
+
+
 
    // 6. SPECIAL EFFECTS (Gift, Petals & Typewriter)
     const message = "My Dearest, \n\nFrom the moment we started this journey on November 11th, my life has been brighter. This site is just a small piece of my heart for you. Thank you for being you. \n\nAlways yours.";
