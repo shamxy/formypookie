@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css?family=Lato|Raleway|Rouge+Script");
+@import url("https://fonts.googleapis.com/css?=Lato|Raleway|Rouge+Script");
 .has-vertically-aligned-content {
   display: flex;
   flex-direction: column;
@@ -148,26 +148,60 @@ html {
   height: 24px;
 }
 
+/* --- Updated Main Content with Faded Background --- */
 .main-content {
+  position: relative;
   padding-top: 2rem;
   color: #000; 
   font-family: 'Raleway', sans-serif;
+  /* Ensures the background covers the entire scrollable area */
+  min-height: 100vh;
 }
 
+.main-content::before {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  /* Replace URL below with your preferred background image */
+  background: linear-gradient(rgba(255, 255, 255, 0.85), rgba(255, 255, 255, 0.85)), 
+              url("https://images.unsplash.com/photo-1518199266791-5375a83190b7?q=80&w=1920") no-repeat center center;
+  background-size: cover;
+  z-index: -1;
+  pointer-events: none;
+}
+
+/* --- Section Adjustments for Transparency --- */
+/* We change background-colors to semi-transparent so the image peaks through */
+
 .main-content .section-dark {
-  background-color: #F4E2E2;
+  background-color: rgba(244, 226, 226, 0.4); /* Faded version of #F4E2E2 */
   padding: 80px 40px;
 }
 
 .main-content .section-darker {
-  background-color: #EDD2D1;
+  background-color: rgba(237, 210, 209, 0.5); /* Faded version of #EDD2D1 */
   padding: 80px 40px;
 }
 
+.main-content .section-light {
+  background-color: rgba(255, 255, 255, 0.3);
+  padding: 80px 40px;
+}
+
+/* --- Keep Cards and Notifications Solid for Readability --- */
+.notification, .card, .table {
+  background-color: rgba(255, 255, 255, 0.9) !important;
+  backdrop-filter: blur(4px); /* Modern frosted glass effect */
+  border-radius: 8px;
+}
+
+/* --- Rest of your original styling --- */
 .main-content .section-dark.resume {
   height: 400px;
   padding-top: 60px;
-
 }
 
 @media (max-width: 599px) {
@@ -199,7 +233,7 @@ html {
 }
 
 .main-content .section-cashbac {
-  background-color: rgb(238, 250, 253);
+  background-color: rgba(238, 250, 253, 0.6);
   padding: 80px 40px; 
 }
 
@@ -211,7 +245,6 @@ html {
 
 .main-content .section-dark.foto-foto .foto-item {
   margin-bottom: 1rem;
-  -webkit-transition: all .1s ease-in-out;
   transition: all .1s ease-in-out;
   border-radius: 5px;
   background-size: cover;
@@ -220,18 +253,12 @@ html {
 }
 
 .main-content .section-dark.my-work .work-item:hover {
-  -webkit-transform: scale(1.055) translateY(-2px);
   transform: scale(1.055) translateY(-2px);
-  -webkit-box-shadow: 0 2px 25px 0 rgba(30, 30, 30, 0.1);
   box-shadow: 0 2px 25px 0 rgba(30, 30, 30, 0.1);
 }
 
 .section-map {
-  padding: 0 0 0 0 ;
-}
-
-.main-content .section-light {
-  padding: 80px 40px;
+  padding: 0;
 }
 
 .main-content .section-light.regular-section {
@@ -267,7 +294,6 @@ html {
 @media (max-width: 599px) {
   .main-content .section-light.skills {
     padding: 50px 20px 40px 20px;
-    padding-bottom: 20px;
   }
 }
 
