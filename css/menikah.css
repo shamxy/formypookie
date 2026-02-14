@@ -947,6 +947,63 @@ body.preloader-site {
 .floating-note-btn {
     pointer-events: auto !important;
 }
+/* Calm & Balanced Timeline Styles */
+#hitungmundur {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap; 
+    gap: 5px;
+    padding: 0;
+    list-style: none;
+    margin: 0 auto;
+}
+
+.timer-block {
+    text-align: center;
+    min-width: 80px; /* Prevents layout shifting */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.timer-number {
+    font-size: 2.8rem;
+    font-weight: 900;
+    color: #996E6D; /* dusty-pink-darkest */
+    display: block;
+    line-height: 1;
+    font-family: 'Raleway', sans-serif;
+}
+
+.timer-label {
+    text-transform: uppercase;
+    font-size: 0.7rem;
+    color: #BC8887; /* dusty-pink-darker */
+    letter-spacing: 1.5px;
+    font-weight: 700;
+    margin-top: 8px;
+}
+
+.timer-sep {
+    font-size: 2rem;
+    color: #EDD2D1; /* dusty-pink-lighter: makes separators subtle */
+    padding-bottom: 25px; /* Aligns colon visually between numbers */
+    font-weight: 300;
+    user-select: none;
+}
+
+/* Calm Responsive behavior */
+@media (max-width: 768px) {
+    .timer-number { font-size: 2rem; }
+    .timer-block { min-width: 60px; }
+    .timer-sep { padding-bottom: 20px; font-size: 1.5rem; }
+}
+
+@media (max-width: 480px) {
+    #hitungmundur { gap: 15px; } 
+    .timer-sep { display: none; } /* Total calm for tiny screens */
+}
 
 
 
