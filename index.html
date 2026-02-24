@@ -701,42 +701,53 @@
         };
     }
 
-   // 4. PRECISE CALENDAR TIMER (Starting Oct 22, 2025)
-function updateTogetherTimer() {
-    const startDate = new Date(2025, 9, 22); // October is month index 9
-    const now = new Date();
-    
-    let years = now.getFullYear() - startDate.getFullYear();
-    let months = now.getMonth() - startDate.getMonth();
-    let days = now.getDate() - startDate.getDate();
+   // 4. TIMERS & CLOCKS
+    function updateTogetherTimer() {
+        const startDate = new Date(2025, 10, 11); 
+        const now = new Date();
+        
+        let years = now.getFullYear() - startDate.getFullYear();
+        let months = (now.getMonth() - startDate.getMonth()) + (years * 12);
+        
+        const tempDate = new Date(startDate);
+        tempDate.setMonth(tempDate.getMonth() + months);
+        
+        if (tempDate > now) {
+            months--;
+            tempDate.setMonth(startDate.getMonth() + months);
+        }
+        
+        const diff = now - tempDate;
+        const totalDays = Math.floor(diff / (1000 * 60 * 60 * 24));
+        const weeks = Math.floor(totalDays / 7);
+        const days = totalDays % 7;
+        
+        const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+        const minutes = Math.floor((diff / (1000 * 60)) % 60);
+        const seconds = Math.floor((diff / 1000) % 60);
 
-    // 1. Adjust for negative days by rolling back to the previous month's actual day count
-    if (days < 0) {
-        months--;
-        // This gets the last day of the month that just passed
-        const previousMonthLastDay = new Date(now.getFullYear(), now.getMonth(), 0).getDate();
-        days += previousMonthLastDay;
+        document.getElementById("t-months").innerText = months.toString().padStart(2, '0');
+        document.getElementById("t-weeks").innerText = weeks.toString().padStart(2, '0');
+        document.getElementById("t-days").innerText = days.toString().padStart(2, '0');
+        document.getElementById("t-hours").innerText = hours.toString().padStart(2, '0');
+        document.getElementById("t-minutes").innerText = minutes.toString().padStart(2, '0');
+        document.getElementById("t-seconds").innerText = seconds.toString().padStart(2, '0');
     }
 
-    // 2. Adjust for negative months
-    if (months < 0) {
-        years--;
-        months += 12;
+    function updateClocks() {
+        const now = new Date();
+        const options1 = { timeZone: 'America/New_York', hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false };
+        const options2 = { timeZone: 'Africa/Accra', hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false };
+        
+        document.getElementById("local-time-1").innerText = new Intl.DateTimeFormat('en-GB', options1).format(now);
+        document.getElementById("local-time-2").innerText = new Intl.DateTimeFormat('en-GB', options2).format(now);
     }
 
-    // 3. Final calculations for display
-    const totalMonths = (years * 12) + months;
-    const weeks = Math.floor(days / 7);
-    const remainingDays = days % 7;
+    setInterval(updateTogetherTimer, 1000);
+    setInterval(updateClocks, 1000);
+    updateTogetherTimer();
+    updateClocks();
 
-    // 4. Update the HTML IDs
-    document.getElementById("t-months").innerText = totalMonths.toString().padStart(2, '0');
-    document.getElementById("t-weeks").innerText = weeks.toString().padStart(2, '0');
-    document.getElementById("t-days").innerText = remainingDays.toString().padStart(2, '0');
-    document.getElementById("t-hours").innerText = now.getHours().toString().padStart(2, '0');
-    document.getElementById("t-minutes").innerText = now.getMinutes().toString().padStart(2, '0');
-    document.getElementById("t-seconds").innerText = now.getSeconds().toString().padStart(2, '0');
-}
     // 5. UI ELEMENTS
     $(window).on('load', function() { 
         $('.preloader-wrapper').fadeOut('fast');
