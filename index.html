@@ -674,22 +674,22 @@
     window.addEventListener('click', unlockAudio);
     window.addEventListener('touchstart', unlockAudio);
 
-    // 3. PLAYLIST LOGIC
-    function playSong(audioUrl, songTitle) {
-        if (mainBgMusic) mainBgMusic.pause();
-        if (currentPlaylistAudio) {
-            currentPlaylistAudio.pause();
-            currentPlaylistAudio.src = "";
-            currentPlaylistAudio.load();
-        }
-        const bar = document.getElementById('now-playing-bar');
-        const trackName = document.getElementById('track-name');
-        trackName.innerText = songTitle;
-        bar.style.display = 'block';
+   // 3. PLAYLIST LOGIC (Fixed to use existing unlocked audio element)
+function playSong(audioUrl, songTitle) {
+    const bar = document.getElementById('now-playing-bar');
+    const trackName = document.getElementById('track-name');
+    
+    // Update the UI
+    if (trackName) trackName.innerText = songTitle;
+    if (bar) bar.style.display = 'block';
 
-        currentPlaylistAudio = new Audio(audioUrl);
-        currentPlaylistAudio.play().catch(e => console.log("Error:", e));
-    }
+    // Use the mainBgMusic element instead of creating a new one
+    // This ensures the "unlocked" status carries over
+    mainBgMusic.pause();
+    mainBgMusic.src = audioUrl;
+    mainBgMusic.load();
+    mainBgMusic.play().catch(e => console.log("Playback error:", e));
+}
 
    // 4. TIMERS & CLOCKS
 function updateTogetherTimer() {
