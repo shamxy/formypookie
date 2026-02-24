@@ -630,232 +630,221 @@
 
     
 <script>
+    // 1. INITIALIZE ANIMATIONS & GLOBALS
+    AOS.init({ easing: "ease-out", duration: 800 });
+    
     const noBtn = document.getElementById('no-btn');
+    const mainBgMusic = document.getElementById("bgMusic");
+    
+    // Create a dedicated player for the playlist to keep it independent
+    let playlistPlayer = new Audio();
+    let currentPlaylistAudio = null;
 
     const teleport = () => {
-        // Calculate random position within the entire viewport
-        // Subtracting button size to keep it from going off-screen
         const newX = Math.random() * (window.innerWidth - noBtn.offsetWidth);
         const newY = Math.random() * (window.innerHeight - noBtn.offsetHeight);
-
         noBtn.style.position = 'fixed';
         noBtn.style.left = `${newX}px`;
         noBtn.style.top = `${newY}px`;
     };
 
-    // Teleport on hover (Desktop)
     noBtn.addEventListener('mouseenter', teleport);
-
-    // Teleport on touch (Mobile)
     noBtn.addEventListener('touchstart', (e) => {
-        e.preventDefault(); // Prevents accidental clicking while touching
+        e.preventDefault();
         teleport();
     });
 
-    // Just in case she's lightning-fast
     noBtn.addEventListener('click', () => {
         alert("Nice try! But that's not the right answer. ❤️");
         teleport();
     });
-    
-    // 1. INITIALIZE ANIMATIONS & GLOBALS
-    AOS.init({ easing: "ease-out", duration: 800 });
-    const mainBgMusic = document.getElementById("bgMusic");
-    let currentPlaylistAudio = null;
 
-    // 2. MAIN AUDIO UNLOCK
-    function unlockAudio() {
-        if (mainBgMusic) {
-            mainBgMusic.play().catch(e => console.log("Waiting for interaction..."));
-            window.removeEventListener('click', unlockAudio);
-            window.removeEventListener('touchstart', unlockAudio);
-        }
-    }
-    window.addEventListener('click', unlockAudio);
-    window.addEventListener('touchstart', unlockAudio);
+    // 2. MAIN AUDIO UNLOCK (Primes both players)
+    function unlockAudio() {
+        if (mainBgMusic) {
+            // Start background music
+            mainBgMusic.play().catch(e => console.log("Waiting for interaction..."));
+            
+            // Prime the playlist player with a silent start to bypass browser blocks
+            playlistPlayer.play().then(() => {
+                playlistPlayer.pause();
+            }).catch(e => console.log("Playlist priming ignored"));
 
-   // 3. PLAYLIST LOGIC (Fixed to use existing unlocked audio element)
-function playSong(audioUrl, songTitle) {
-    const bar = document.getElementById('now-playing-bar');
-    const trackName = document.getElementById('track-name');
-    
-    // Update the UI
-    if (trackName) trackName.innerText = songTitle;
-    if (bar) bar.style.display = 'block';
-
-    // Use the mainBgMusic element instead of creating a new one
-    // This ensures the "unlocked" status carries over
-    mainBgMusic.pause();
-    mainBgMusic.src = audioUrl;
-    mainBgMusic.load();
-    mainBgMusic.play().catch(e => console.log("Playback error:", e));
-}
-
-   // 4. TIMERS & CLOCKS
-function updateTogetherTimer() {
-    const startDate = new Date(2025, 10, 11); // Nov 11, 2025
-    const now = new Date();
-    
-    let years = now.getFullYear() - startDate.getFullYear();
-    let months = (now.getMonth() - startDate.getMonth()) + (years * 12);
-    
-    // Create a temporary date to calculate remaining days after months
-    const tempDate = new Date(startDate);
-    tempDate.setMonth(tempDate.getMonth() + months);
-    
-    // If tempDate is in the future, we overshot by one month
-    if (tempDate > now) {
-        months--;
-        tempDate.setMonth(startDate.getMonth() + months);
+            window.removeEventListener('click', unlockAudio);
+            window.removeEventListener('touchstart', unlockAudio);
+        }
     }
-    
-    // Difference in milliseconds after subtracting full months
-    const diff = now - tempDate;
-    
-    // Calculate weeks and the remaining days
-    const totalDays = Math.floor(diff / (1000 * 60 * 60 * 24));
-    const weeks = Math.floor(totalDays / 7);
-    const days = totalDays % 7;
-    
-    const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
-    const minutes = Math.floor((diff / (1000 * 60)) % 60);
-    const seconds = Math.floor((diff / 1000) % 60);
+    window.addEventListener('click', unlockAudio);
+    window.addEventListener('touchstart', unlockAudio);
 
-    // Update the HTML
-    document.getElementById("t-months").innerText = months.toString().padStart(2, '0');
-    document.getElementById("t-weeks").innerText = weeks.toString().padStart(2, '0');
-    document.getElementById("t-days").innerText = days.toString().padStart(2, '0');
-    document.getElementById("t-hours").innerText = hours.toString().padStart(2, '0');
-    document.getElementById("t-minutes").innerText = minutes.toString().padStart(2, '0');
-    document.getElementById("t-seconds").innerText = seconds.toString().padStart(2, '0');
-}
-
-function updateClocks() {
-    const now = new Date();
-    const options1 = { timeZone: 'America/New_York', hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false };
-    const options2 = { timeZone: 'Africa/Accra', hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false };
-    
-    document.getElementById("local-time-1").innerText = new Intl.DateTimeFormat('en-GB', options1).format(now);
-    document.getElementById("local-time-2").innerText = new Intl.DateTimeFormat('en-GB', options2).format(now);
-}
-
-setInterval(updateTogetherTimer, 1000);
-setInterval(updateClocks, 1000);
-updateTogetherTimer();
-updateClocks();
-
-    // 5. UI ELEMENTS (Preloader & Modals)
-    $(window).on('load', function() { 
-        $('.preloader-wrapper').fadeOut('fast');
-    });
-
-    $('.card-image img').on('click', function() {
-        $('#modal-img').attr('src', $(this).attr('src'));
-        $('#image-modal').css('display', 'flex');
-    });
-
-    function openModal(card) {
-        const title = card.querySelector('.title').innerText;
-        const fullBody = card.querySelector('.full-text').innerText;
-        document.getElementById('m-title').innerText = title;
-        document.getElementById('m-body').innerText = fullBody;
-        document.getElementById('lesson-modal').classList.add('is-active');
-    }
-
-    function closeModal() {
-        document.getElementById('lesson-modal').classList.remove('is-active');
-    }
-
-const messages = [
-    "You're the best part of my day.",
-    "Thinking of you always makes me smile.",
-    "I'm so lucky to have you, Abena.",
-    "Every second with you is a gift.",
-    "You are my favorite person.",
-    "I love the way you laugh.",
-    "You're the most beautiful girl I know.",
-];
-
-function toggleNote() {
-    const note = document.getElementById('love-note');
-    const textElement = document.getElementById('note-text');
-    
-    if (note.style.display === 'none' || note.style.display === '') {
-        const randomMessage = messages[Math.floor(Math.random() * messages.length)];
-        textElement.innerText = randomMessage;
+    // 3. PLAYLIST LOGIC
+    function playSong(audioUrl, songTitle) {
+        const bar = document.getElementById('now-playing-bar');
+        const trackName = document.getElementById('track-name');
         
-        note.style.display = 'block';
-        
-        // Auto-hide after 6 seconds
-        setTimeout(() => { 
-            note.style.display = 'none'; 
-        }, 6000);
-    } else {
-        note.style.display = 'none';
+        if (trackName) trackName.innerText = songTitle;
+        if (bar) bar.style.display = 'block';
+
+        // Stop the background music while the playlist song plays
+        if (mainBgMusic) mainBgMusic.pause();
+
+        // Load and play the new song
+        playlistPlayer.src = audioUrl;
+        playlistPlayer.load();
+        playlistPlayer.play().catch(e => console.log("Playback error:", e));
+
+        // When the playlist song ends, automatically resume background music
+        playlistPlayer.onended = function() {
+            if (mainBgMusic) mainBgMusic.play();
+            // Optional: hide the bar when song ends
+            // if (bar) bar.style.display = 'none';
+        };
     }
-}
 
-   // 6. SPECIAL EFFECTS (Gift, Petals & Typewriter)
-    const message = "My Dearest, \n\nFrom the moment we started this journey on November 11th, my life has been brighter. This site is just a small piece of my heart for you. Thank you for being you. \n\nAlways yours.";
-    let index = 0;
+    // 4. TIMERS & CLOCKS
+    function updateTogetherTimer() {
+        const startDate = new Date(2025, 10, 11); 
+        const now = new Date();
+        
+        let years = now.getFullYear() - startDate.getFullYear();
+        let months = (now.getMonth() - startDate.getMonth()) + (years * 12);
+        
+        const tempDate = new Date(startDate);
+        tempDate.setMonth(tempDate.getMonth() + months);
+        
+        if (tempDate > now) {
+            months--;
+            tempDate.setMonth(startDate.getMonth() + months);
+        }
+        
+        const diff = now - tempDate;
+        const totalDays = Math.floor(diff / (1000 * 60 * 60 * 24));
+        const weeks = Math.floor(totalDays / 7);
+        const days = totalDays % 7;
+        
+        const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+        const minutes = Math.floor((diff / (1000 * 60)) % 60);
+        const seconds = Math.floor((diff / 1000) % 60);
 
-    function typeWriter() {
-        const textElement = document.getElementById("typewriter-text");
-        if (textElement && index < message.length) {
-            const char = message.charAt(index);
-            textElement.innerHTML += char === "\n" ? "<br>" : char;
-            index++;
-            setTimeout(typeWriter, 50); 
-        }
-    }
+        document.getElementById("t-months").innerText = months.toString().padStart(2, '0');
+        document.getElementById("t-weeks").innerText = weeks.toString().padStart(2, '0');
+        document.getElementById("t-days").innerText = days.toString().padStart(2, '0');
+        document.getElementById("t-hours").innerText = hours.toString().padStart(2, '0');
+        document.getElementById("t-minutes").innerText = minutes.toString().padStart(2, '0');
+        document.getElementById("t-seconds").innerText = seconds.toString().padStart(2, '0');
+    }
 
-    function createPetals() {
-        const symbols = ['🌸', '✨', '💖', '░'];
-        for (let i = 0; i < 25; i++) {
-            const petal = document.createElement('div');
-            petal.className = 'petal';
-            petal.innerHTML = symbols[Math.floor(Math.random() * symbols.length)];
-            petal.style.left = Math.random() * 100 + 'vw';
-            petal.style.fontSize = Math.random() * 20 + 10 + 'px';
-            petal.style.opacity = Math.random();
-            const duration = Math.random() * 5 + 5 + 's';
-            petal.style.animationDuration = duration + ', 3s';
-            petal.style.animationDelay = Math.random() * 5 + 's';
-            document.body.appendChild(petal);
-        }
-    }
+    function updateClocks() {
+        const now = new Date();
+        const options1 = { timeZone: 'America/New_York', hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false };
+        const options2 = { timeZone: 'Africa/Accra', hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false };
+        
+        document.getElementById("local-time-1").innerText = new Intl.DateTimeFormat('en-GB', options1).format(now);
+        document.getElementById("local-time-2").innerText = new Intl.DateTimeFormat('en-GB', options2).format(now);
+    }
 
-    function openGift() {
-        const loader = document.getElementById("loader-wrapper");
-        const elem = document.documentElement;
+    setInterval(updateTogetherTimer, 1000);
+    setInterval(updateClocks, 1000);
+    updateTogetherTimer();
+    updateClocks();
 
-        // Trigger Full Screen
-        if (elem.requestFullscreen) {
-            elem.requestFullscreen();
-        } else if (elem.webkitRequestFullscreen) {
-            elem.webkitRequestFullscreen();
-        } else if (elem.msRequestFullscreen) {
-            elem.msRequestFullscreen();
-        }
+    // 5. UI ELEMENTS
+    $(window).on('load', function() { 
+        $('.preloader-wrapper').fadeOut('fast');
+    });
 
-        // Run Petals
-        createPetals();
+    $('.card-image img').on('click', function() {
+        $('#modal-img').attr('src', $(this).attr('src'));
+        $('#image-modal').css('display', 'flex');
+    });
 
-        // Start Typewriter after a 2-second delay
-        setTimeout(typeWriter, 2000);
+    function openModal(card) {
+        const title = card.querySelector('.title').innerText;
+        const fullBody = card.querySelector('.full-text').innerText;
+        document.getElementById('m-title').innerText = title;
+        document.getElementById('m-body').innerText = fullBody;
+        document.getElementById('lesson-modal').classList.add('is-active');
+    }
 
-        // Hide Loader & Start Music
-        if (loader) {
-            loader.classList.add("loader-hidden");
-            unlockAudio();
-        }
-    }
+    function closeModal() {
+        document.getElementById('lesson-modal').classList.remove('is-active');
+    }
+
+    const messages = [
+        "You're the best part of my day.",
+        "Thinking of you always makes me smile.",
+        "I'm so lucky to have you, Abena.",
+        "Every second with you is a gift.",
+        "You are my favorite person.",
+        "I love the way you laugh.",
+        "You're the most beautiful girl I know.",
+    ];
+
+    function toggleNote() {
+        const note = document.getElementById('love-note');
+        const textElement = document.getElementById('note-text');
+        
+        if (note.style.display === 'none' || note.style.display === '') {
+            const randomMessage = messages[Math.floor(Math.random() * messages.length)];
+            textElement.innerText = randomMessage;
+            note.style.display = 'block';
+            setTimeout(() => { note.style.display = 'none'; }, 6000);
+        } else {
+            note.style.display = 'none';
+        }
+    }
+
+    // 6. SPECIAL EFFECTS
+    const message = "My Dearest, \n\nFrom the moment we started this journey on November 11th, my life has been brighter. This site is just a small piece of my heart for you. Thank you for being you. \n\nAlways yours.";
+    let index = 0;
+
+    function typeWriter() {
+        const textElement = document.getElementById("typewriter-text");
+        if (textElement && index < message.length) {
+            const char = message.charAt(index);
+            textElement.innerHTML += char === "\n" ? "<br>" : char;
+            index++;
+            setTimeout(typeWriter, 50); 
+        }
+    }
+
+    function createPetals() {
+        const symbols = ['🌸', '✨', '💖', '░'];
+        for (let i = 0; i < 25; i++) {
+            const petal = document.createElement('div');
+            petal.className = 'petal';
+            petal.innerHTML = symbols[Math.floor(Math.random() * symbols.length)];
+            petal.style.left = Math.random() * 100 + 'vw';
+            petal.style.fontSize = Math.random() * 20 + 10 + 'px';
+            petal.style.opacity = Math.random();
+            const duration = Math.random() * 5 + 5 + 's';
+            petal.style.animationDuration = duration + ', 3s';
+            petal.style.animationDelay = Math.random() * 5 + 's';
+            document.body.appendChild(petal);
+        }
+    }
+
+    function openGift() {
+        const loader = document.getElementById("loader-wrapper");
+        const elem = document.documentElement;
+
+        if (elem.requestFullscreen) { elem.requestFullscreen(); }
+        else if (elem.webkitRequestFullscreen) { elem.webkitRequestFullscreen(); }
+
+        createPetals();
+        setTimeout(typeWriter, 2000);
+
+        if (loader) {
+            loader.classList.add("loader-hidden");
+            unlockAudio();
+        }
+    }
+
     // 7. HEART TRAIL EFFECT
     let lastX = 0;
     let lastY = 0;
 
     window.addEventListener('mousemove', (e) => {
-        // Only create a heart if the mouse has moved a certain distance (15px)
         const dist = Math.hypot(e.clientX - lastX, e.clientY - lastY);
         if (dist > 15) {
             createHeart(e.clientX, e.clientY);
@@ -864,7 +853,6 @@ function toggleNote() {
         }
     });
 
-    // Support for touch screens (mobile)
     window.addEventListener('touchmove', (e) => {
         const touch = e.touches[0];
         createHeart(touch.clientX, touch.clientY);
@@ -874,19 +862,12 @@ function toggleNote() {
         const heart = document.createElement('div');
         heart.className = 'heart-trail';
         heart.innerHTML = '❤';
-        
-        // Randomize size and color slightly for variety
         const colors = ['#BC8887', '#996E6D', '#D8A9A8', '#FFB6C1'];
         heart.style.color = colors[Math.floor(Math.random() * colors.length)];
         heart.style.left = x + 'px';
         heart.style.top = y + 'px';
-        
         document.body.appendChild(heart);
-        
-        // Remove from DOM after animation finishes
-        setTimeout(() => {
-            heart.remove();
-        }, 1500);
+        setTimeout(() => { heart.remove(); }, 1500);
     }
 </script>
 
